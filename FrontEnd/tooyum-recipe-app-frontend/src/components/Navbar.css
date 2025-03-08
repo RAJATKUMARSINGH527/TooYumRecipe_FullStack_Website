@@ -1,0 +1,133 @@
+/* Navbar Container */
+.navbar {
+    width: 96%;
+    background-color: #222;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+  
+  /* Logo Styling */
+  .logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ffcc00;
+    text-decoration: none;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .logo:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Navigation Links */
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .nav-links li {
+    display: inline-block;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .nav-links a:hover {
+    color: #ffcc00;
+  }
+  
+  /* Mobile Menu Button */
+  .menu-button {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: white;
+    cursor: pointer;
+  }
+  
+  /* Logout Button */
+  .logout-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+    border-radius: 5px;
+  }
+  
+  .logout-btn:hover {
+    background-color: #e60000;
+    transform: scale(1.05);
+  }
+  
+  /* Responsive Design */
+  @media screen and (max-width: 768px) {
+    .menu-button {
+      display: block;
+    }
+  
+    .nav-links {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background-color: #222;
+      width: 100%;
+      text-align: center;
+      padding: 1rem 0;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+  
+    .nav-links.open {
+      display: flex;
+    }
+  
+    .nav-links li {
+      margin: 10px 0;
+    }
+  
+    .logout-btn {
+      width: 80%;
+      margin: 0 auto;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .logo {
+      font-size: 1.5rem;
+    }
+  
+    .menu-button {
+      font-size: 1.6rem;
+    }
+  
+    .nav-links a {
+      font-size: 0.95rem;
+    }
+  
+    .logout-btn {
+      font-size: 0.9rem;
+    }
+  }
+  
