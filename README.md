@@ -13,7 +13,7 @@ The **TooYum Recipe FullStack Website** allows users to **discover, save, and in
 
 Built with **React (frontend), Node.js/Express (backend), and MongoDB (database)**, this project demonstrates full-stack development.  
 
-🔗 **Live Demo:** [Click here to view the deployed application](#) *(Provide Deployment Link Here)*  
+🔗 **Live Demo:**  *([Click here to view the deployed application ](https://too-yum-recipe-full-stack-website.vercel.app/))*  
 
 ---
 
@@ -22,10 +22,15 @@ Built with **React (frontend), Node.js/Express (backend), and MongoDB (database)
 
 ### 🌟 Features  
 ✅ Search for seafood recipes using a external TheMealDB API *(https://spoonacular.com/food-api)*
+
 ✅ Like and save favorite recipes to user profile
+
 ✅ Responsive UI for all devices
+
 ✅ Backend for user authentication and recipe management
+
 ✅ User Authentication (Signup/Login with JWT)  
+
 ✅ Secure API with JWT-based authentication  
 
 ### 🛠️ Tech Stack  
@@ -133,8 +138,8 @@ Frontend runs on http://localhost:5173
 
 ## 🌐 Deployment Links
 
-Frontend (Vercel): **Live App** *(Provide Link Here)*  
-Backend (Render): **Live API** *(Provide Link Here)*  
+Frontend (Vercel): **Live App** *([Frontend Deployed Link Here](https://too-yum-recipe-full-stack-website.vercel.app/))*  
+Backend (Render): **Live API** *([Backend Deployed Link Here](https://tooyumrecipe-fullstack-website.onrender.com))*  
 
 ---
 
