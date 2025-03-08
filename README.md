@@ -1,13 +1,5 @@
 # ✨ TooYumRecipe_FullStack_Website
 
-
-## Features
-
-- Search for seafood recipes using TheMealDB API
-- Like and save favorite recipes
-- Responsive design for all devices
-- Backend for user authentication and recipe management
-
 ## 🌟 Project Overview  
 The **TooYum Recipe FullStack Website** allows users to **discover, save, and interact with recipes**. Users can **search for recipes, like their favorites, and view saved recipes**. The application provides a seamless user experience with authentication and dynamic UI updates.
 
