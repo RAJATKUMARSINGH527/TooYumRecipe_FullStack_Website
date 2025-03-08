@@ -1,14 +1,16 @@
 /* Navbar Container */
 .navbar {
     width: 96%;
-    background-color: #222;
+    background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
+    
+     /* background-image: linear-gradient( 91.7deg,  rgba(135,206,235,1) 7.3%, rgba(255,154,139,1) 40.3%, rgba(255,195,160,1) 57.9%, rgba(255,215,0,1) 93.5% ); */
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    position: fixed;
+    position: sticky;
     top: 0;
     left: 0;
     z-index: 1000;
@@ -18,7 +20,7 @@
   .logo {
     font-size: 1.8rem;
     font-weight: bold;
-    color: #ffcc00;
+    color: white;
     text-decoration: none;
     transition: transform 0.2s ease-in-out;
   }
@@ -44,12 +46,12 @@
     text-decoration: none;
     color: white;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 700;
     transition: color 0.3s ease-in-out;
   }
   
   .nav-links a:hover {
-    color: #ffcc00;
+    color: black;
   }
   
   /* Mobile Menu Button */

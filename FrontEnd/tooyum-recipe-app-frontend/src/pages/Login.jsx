@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 
 const Login = () => {
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -11,11 +12,16 @@ const Login = () => {
     e.preventDefault();
     setError("");
 
+    if (!email || !password) {
+      setError("Every field is required");
+      return;
+    }
+
     try {
       const response = await fetch("http://localhost:5000/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({email, password }),
       });
 
       const data = await response.json();
@@ -33,12 +39,38 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <form onSubmit={handleLogin}>
-        <input type="email" placeholder="Email" onChange={(e) => setFormData({...formData, email: e.target.value})} />
-        <input type="password" placeholder="Password" onChange={(e) => setFormData({...formData, password: e.target.value})} />
-        <button type="submit">Log In</button>
-      </form>
-      <Link to="/signup">Don't have an account? Sign Up</Link>
+      <div className="login-box">
+        <div className="login-icon">
+          <span>💬</span>
+        </div>
+        <h2 className="login-title">Welcome back!</h2>
+        <p className="login-subtitle">We're so excited to see you again!</p>
+
+        {error && <p className="error-message">{error}</p>}
+
+        <form onSubmit={handleLogin}>
+          <label>Email Address</label>
+          <input
+            type="email"
+            placeholder="Email Address..."
+            className="login-input"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <label>Password</label>
+          <input
+            type="password"
+            placeholder="Password..."
+            className="login-input"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button type="submit" className="login-button">Log In</button>
+        </form>
+        <p className="login-footer">
+          Need an account? <Link to="/signup" className="signup-link">Register</Link>
+        </p>
+      </div>
     </div>
   );
 };

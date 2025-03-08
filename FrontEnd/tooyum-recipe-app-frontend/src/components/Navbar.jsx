@@ -33,7 +33,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       {/* Logo */}
-      <Link to="/" className="logo">TOOYUM🍽</Link>
+      <Link to="/" className="logo">TOOYUM</Link>
 
       {/* Mobile Menu Button */}
       <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)}>
