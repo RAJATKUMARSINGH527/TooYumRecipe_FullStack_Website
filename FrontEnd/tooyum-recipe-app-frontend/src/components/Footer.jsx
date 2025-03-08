@@ -28,7 +28,7 @@ const Footer = () => {
         </div>
 
         <p className="footer-copy">
-          © {new Date().getFullYear()} RecipeApp. All rights reserved.
+          © {new Date().getFullYear()} TOOYUM_Website. All rights reserved.
         </p>
       </div>
     </footer>

@@ -3,8 +3,9 @@ import { Heart, Search } from "lucide-react";
 import "./Home.css";
 
 const images = [
-  "https://img.freepik.com/free-photo/mexican-food-composition_23-2147740702.jpg?t=st=1741445423~exp=1741449023~hmac=69ee694c065141bb4068291d869a803943fc13d490e5399e7d543354b6664dbd&w=1380",
-  "https://img.freepik.com/free-photo/tasty-pizza-near-ingredients_23-2147772080.jpg?t=st=1741445377~exp=1741448977~hmac=dac1c0e6583de4af1532e5f2449fa75d7c01b147c7bf14cec68e46d57a7ed693&w=1800",
+  "https://images7.alphacoders.com/109/1097602.jpg",
+  "https://static.vecteezy.com/system/resources/previews/048/905/111/non_2x/labor-day-barbecue-feast-with-grilled-meats-and-vegetables-photo.jpg",
+  "https://png.pngtree.com/background/20210709/original/pngtree-food-spicy-and-seductive-lobster-shellfish-chinese-meal-background-picture-image_912702.jpg",
   "https://img.freepik.com/free-photo/barbecue-grilled-beef-steak-meat-with-asparagus-tomato-top-view_2829-16876.jpg?t=st=1741444966~exp=1741448566~hmac=484a090ccecf6606f5aa71e82d3aefd1c80f1496e25020cf8b77cab409cc3cb2&w=1380",
   "https://img.freepik.com/premium-photo/assorted-grilled-meat-fresh-salads-dipping-sauces-dark-rustic-background-perfect-ramadan-iftar-meals-eid-celebrations-festive-dinner-parties-restaurant-menus-food-blog-visuals_1313172-973.jpg?w=1380",
 ];
