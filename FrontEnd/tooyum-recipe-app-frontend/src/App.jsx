@@ -4,9 +4,11 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Footer from "./components/Footer";
-import Dashboard from "./pages/Dashboard";
+import FavouriteRecipes from "./pages/Favourite";
+
 
 const App = () => {
+  const token = localStorage.getItem("accessToken");
   return (
     <div>
       <Navbar />
@@ -14,7 +16,8 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        {/* Protected Routes */}
+        <Route path="/favourite" element={token ? <FavouriteRecipes />:<Login/>} />
       </Routes>
       <Footer />
     </div>

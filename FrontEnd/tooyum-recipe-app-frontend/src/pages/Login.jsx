@@ -21,13 +21,15 @@ const Login = () => {
       const response = await fetch("http://localhost:5000/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({email, password }),
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem("token", data.token);
-        navigate("/dashboard");
+        localStorage.setItem("accessToken", data.token);
+        console.log("Access Token :-", data.token);
+        window.dispatchEvent(new Event("authChange"));
+        navigate("/");
         alert(data.message);
       } else {
         setError(data.message || "Invalid credentials");
@@ -56,6 +58,7 @@ const Login = () => {
             className="login-input"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email" // ✅ Added this
           />
           <label>Password</label>
           <input
@@ -64,6 +67,7 @@ const Login = () => {
             className="login-input"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password" // ✅ Added this
           />
           <button type="submit" className="login-button">Log In</button>
         </form>

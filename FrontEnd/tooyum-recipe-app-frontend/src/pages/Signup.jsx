@@ -32,6 +32,7 @@ const Signup = () => {
 
       const data = await response.json();
       if (response.ok) {
+        console.log(data);
         navigate("/login");
         alert(data.message);
       } else {
@@ -84,7 +85,9 @@ const Signup = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
-          <button type="submit" className="signup-button">Sign Up</button>
+          <Link to="/login">
+            <button type="submit" className="signup-button">Sign Up</button>
+          </Link>
         </form>
         <p className="signup-footer">
           Already have an account? <Link to="/login" className="login-link">Log In</Link>

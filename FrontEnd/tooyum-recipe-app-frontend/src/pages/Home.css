@@ -348,7 +348,7 @@ body {
 }
 
 .like-button .liked {
-  color: red;
+  color: red !important;
 }
 
 /* Modal */
@@ -386,11 +386,8 @@ body {
 }
 
 .close-button {
-  
-   background: none;
-  border: none;
-
-
+    background: none;
+    border: none;
     float: right;
     cursor: pointer;
     font-size: 25px;
