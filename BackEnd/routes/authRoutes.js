@@ -7,4 +7,4 @@ authRouter.post("/login", login);
 authRouter.get("/users",getAllUsers)
 authRouter.get("/user/:id",getAllUsersById)
 
-module.exports = authRouter;
+module.exports = {authRouter};
