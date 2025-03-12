@@ -11,15 +11,21 @@ const API_KEYS = [
   process.env.SPOONACULAR_API_KEY_4,
 ].filter(Boolean);
 
+console.log("Loaded API Keys:", API_KEYS);
+
 const fetchFromSpoonacular = async (url) => {
+  console.log("Fetching from Spoonacular:", url);
   if (!API_KEYS.length) throw new Error("No API keys configured");
 
   for (const apiKey of API_KEYS) {
     try {
       const separator = url.includes("?") ? "&" : "?";
       const fullUrl = `${url}${separator}apiKey=${apiKey}`;
+      console.log(`Using API Key: ${apiKey}`);
+
       const response = await fetch(fullUrl);
-      
+      console.log(`Response Status: ${response.status}`);
+
       if (!response.ok) {
         if ([402, 429].includes(response.status)) {
           console.warn(`API key ${apiKey} is rate-limited. Trying next key.`);
@@ -27,7 +33,7 @@ const fetchFromSpoonacular = async (url) => {
         }
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      
+
       return await response.json();
     } catch (error) {
       console.error(`Error with API key ${apiKey}:`, error.message);
@@ -37,11 +43,14 @@ const fetchFromSpoonacular = async (url) => {
   throw new Error("All API keys exhausted or failed");
 };
 
-
 exports.getAllRecipes = async (req, res) => {
+  console.log("Fetching all recipes...");
   try {
     if (!API_KEYS.length) return res.status(500).json({ error: "No API keys configured" });
+
     const data = await fetchFromSpoonacular(`${SPOONACULAR_API_BASE}/random?number=100`);
+    console.log("Fetched Recipes Data:", data);
+
     if (!data || !data.recipes) return res.status(500).json({ error: "No recipes found" });
     res.status(200).json(data.recipes || []);
   } catch (error) {
@@ -50,20 +59,19 @@ exports.getAllRecipes = async (req, res) => {
   }
 };
 
-
 exports.searchRecipe = async (req, res) => {
+  console.log("Searching for recipe...", req.query);
   try {
     const { query } = req.query;
     if (!query) {
       return res.status(400).json({ error: "Search query is required" });
     }
-    if (API_KEYS.length === 0) {
-      return res.status(500).json({ error: "No API keys configured" });
-    }
 
     const data = await fetchFromSpoonacular(
       `${SPOONACULAR_API_BASE}/complexSearch?query=${encodeURIComponent(query)}`
     );
+    console.log("Search Results:", data);
+
     res.status(200).json(data.results);
   } catch (error) {
     console.error("Error searching recipes:", error.message);
@@ -71,11 +79,13 @@ exports.searchRecipe = async (req, res) => {
   }
 };
 
-
 exports.getSavedRecipes = async (req, res) => {
+  console.log("Fetching saved recipes for user:", req.user.id);
   try {
     const user = await UserModel.findById(req.user.id).populate("savedRecipes");
     if (!user) return res.status(404).json({ error: "User not found" });
+
+    console.log("User Saved Recipes:", user.savedRecipes);
     res.status(200).json(user.savedRecipes || []);
   } catch (error) {
     console.error("Error fetching saved recipes:", error);
@@ -84,6 +94,7 @@ exports.getSavedRecipes = async (req, res) => {
 };
 
 exports.updateSavedRecipesOrder = async (req, res) => {
+  console.log("Updating saved recipe order:", req.body);
   try {
     const { recipeIds } = req.body;
     if (!Array.isArray(recipeIds) || recipeIds.length === 0) {
@@ -91,24 +102,17 @@ exports.updateSavedRecipesOrder = async (req, res) => {
     }
 
     const userId = req.user.id || req.user._id;
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ error: "Invalid user ID format" });
-    }
+    console.log("User ID:", userId);
 
     const user = await UserModel.findById(userId).populate("savedRecipes");
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
+    if (!user) return res.status(404).json({ error: "User not found" });
 
-    const currentRecipeIds = user.savedRecipes.map((recipe) => recipe._id.toString());
-    if (!recipeIds.every((id) => currentRecipeIds.includes(id))) {
-      return res.status(400).json({
-        error: "One or more recipe IDs are invalid or not owned by user",
-      });
-    }
-
+    console.log("Current Saved Recipes:", user.savedRecipes);
+    
     user.savedRecipes = recipeIds.map((id) => new mongoose.Types.ObjectId(id));
     await user.save();
+
+    console.log("Updated Saved Recipes Order:", user.savedRecipes);
 
     const updatedUser = await UserModel.findById(userId).populate("savedRecipes");
     res.status(200).json(updatedUser.savedRecipes);
@@ -118,27 +122,26 @@ exports.updateSavedRecipesOrder = async (req, res) => {
   }
 };
 
-
-
 exports.deleteSavedRecipe = async (req, res) => {
+  console.log("Deleting saved recipe:", req.params.recipeId);
   try {
     const { recipeId } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(recipeId)) {
-      return res.status(400).json({ error: "Invalid recipe ID" });
-    }
+
     const user = await UserModel.findById(req.user.id);
     if (!user) return res.status(404).json({ error: "User not found" });
+
+    console.log("User found, checking recipe...");
     
-    // Ensure recipe exists and belongs to user
     const recipe = await RecipeModel.findOne({ _id: recipeId, userId: req.user.id });
     if (!recipe) return res.status(404).json({ error: "Recipe not found or unauthorized" });
 
-    // Remove from user's savedRecipes list
+    console.log("Recipe found, deleting...");
+
     user.savedRecipes = user.savedRecipes.filter((id) => id.toString() !== recipeId);
     await user.save();
 
     const deletedRecipe = await RecipeModel.findByIdAndDelete(recipeId);
-    if (!deletedRecipe) return res.status(404).json({ error: "Recipe not found" });
+    console.log("Deleted Recipe:", deletedRecipe);
 
     res.status(200).json({ message: "Recipe deleted successfully" });
   } catch (error) {
@@ -147,31 +150,22 @@ exports.deleteSavedRecipe = async (req, res) => {
   }
 };
 
-
-
 exports.saveRecipe = async (req, res) => {
+  console.log("Saving new recipe:", req.body);
   try {
-    const { recipeId, title, image, ingredients, instructions, vegan, readyInMinutes, nutrition } = req.body;
-    if (!recipeId || !title || !image || typeof vegan !== "boolean" || !readyInMinutes)
-      return res.status(400).json({ error: "All required recipe fields must be provided" });
-
-    // Check if recipe exists in Spoonacular before saving
+    const { recipeId, title, image, vegan, readyInMinutes, nutrition } = req.body;
+    
     const existingRecipe = await fetchFromSpoonacular(`${SPOONACULAR_API_BASE}/${recipeId}/information`);
-    if (!existingRecipe) return res.status(404).json({ error: "Recipe not found in Spoonacular" });
+    console.log("Recipe exists in Spoonacular:", existingRecipe);
 
     const user = await UserModel.findById(req.user.id);
     if (!user) return res.status(404).json({ error: "User not found" });
-
-    if (await RecipeModel.findOne({ recipeId, userId: req.user.id }))
-      return res.status(400).json({ error: "Recipe already saved" });
 
     const newRecipe = new RecipeModel({
       recipeId,
       userId: req.user.id,
       title,
       image,
-      ingredients: ingredients || [],
-      instructions: instructions || "",
       vegan,
       readyInMinutes,
       nutrition: {
@@ -186,6 +180,7 @@ exports.saveRecipe = async (req, res) => {
     user.savedRecipes.push(newRecipe._id);
     await user.save();
 
+    console.log("Recipe saved successfully:", newRecipe);
     res.status(201).json({ message: "Recipe saved!", recipe: newRecipe });
   } catch (error) {
     console.error("Error saving recipe:", error);
@@ -194,11 +189,14 @@ exports.saveRecipe = async (req, res) => {
 };
 
 exports.getRecipeById = async (req, res) => {
+  console.log("Fetching recipe by ID:", req.params.id);
   try {
     const { id } = req.params;
-    if (!id || isNaN(id)) return res.status(400).json({ error: "Valid recipe ID is required" });
     const data = await fetchFromSpoonacular(`${SPOONACULAR_API_BASE}/${id}/information`);
+    
+    console.log("Fetched Recipe Data:", data);
     if (!data) return res.status(404).json({ error: "Recipe not found" });
+
     res.status(200).json(data || {});
   } catch (error) {
     console.error("Error fetching recipe details:", error);
