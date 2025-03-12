@@ -12,7 +12,7 @@ const images = [
 
 const RecipeCard = ({ recipe, onClick, isAuthenticated }) => {
   const [isLiked, setIsLiked] = useState(
-    JSON.parse(localStorage.getItem("likedRecipes"))?.some(
+    JSON.parse(localStorage.getItem("savedRecipes"))?.some(
       (r) => r.idMeal === recipe.idMeal
     ) || false
   );
@@ -20,17 +20,20 @@ const RecipeCard = ({ recipe, onClick, isAuthenticated }) => {
   const handleLike = (e) => {
     e.stopPropagation();
     if (!isAuthenticated) return;
-    const likedRecipes = JSON.parse(localStorage.getItem("likedRecipes")) || [];
+    const likedRecipes = JSON.parse(localStorage.getItem("savedRecipes")) || [];
     let updatedLikes = isLiked
       ? likedRecipes.filter((r) => r.idMeal !== recipe.idMeal)
       : [...likedRecipes, recipe];
 
-    localStorage.setItem("likedRecipes", JSON.stringify(updatedLikes));
+    localStorage.setItem("savedRecipes", JSON.stringify(updatedLikes));
     setIsLiked(!isLiked);
   };
 
   return (
-    <div className="recipe-card" onClick={() => isAuthenticated && onClick(recipe)}>
+    <div
+      className="recipe-card"
+      onClick={() => isAuthenticated && onClick(recipe)}
+    >
       <div className="recipe-image-container">
         <img
           src={recipe.strMealThumb}
@@ -59,7 +62,6 @@ const Home = () => {
   const [currentImage, setCurrentImage] = useState(0);
   const isAuthenticated = Boolean(localStorage.getItem("accessToken"));
 
-  
   const fetchRecipes = async (query = "") => {
     try {
       setIsLoading(true);
@@ -68,7 +70,8 @@ const Home = () => {
         url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`;
       }
       const response = await fetch(url);
-      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      if (!response.ok)
+        throw new Error(`HTTP error! Status: ${response.status}`);
       const data = await response.json();
       setRecipes(data.meals || []);
     } catch (err) {
@@ -81,7 +84,6 @@ const Home = () => {
   useEffect(() => {
     fetchRecipes();
   }, []);
-
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -115,7 +117,7 @@ const Home = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-             <button onClick={() => fetchRecipes(searchQuery)}>Search</button>
+          <button onClick={() => fetchRecipes(searchQuery)}>Search</button>
         </div>
       </div>
 
