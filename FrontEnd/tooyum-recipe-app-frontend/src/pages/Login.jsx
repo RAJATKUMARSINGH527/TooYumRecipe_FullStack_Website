@@ -6,28 +6,38 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true); // Show loader
 
     if (!email || !password) {
       setError("Every field is required");
+      setLoading(false);
       return;
     }
 
     try {
-      const response = await fetch("https://tooyumrecipe-fullstack-website.onrender.com/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        "https://tooyumrecipe-fullstack-website.onrender.com/auth/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
+      // Log response details for debugging
+      console.log("Waiting for response...");
       const data = await response.json();
+      console.log("Response received:", data);
+
       if (response.ok) {
         localStorage.setItem("accessToken", data.token);
-        console.log("Access Token :-", data.token);
+        console.log("Access Token:", data.token);
         window.dispatchEvent(new Event("authChange"));
         navigate("/");
         alert(data.message);
@@ -35,7 +45,9 @@ const Login = () => {
         setError(data.message || "Invalid credentials");
       }
     } catch (err) {
-      setError("An error occurred. Please try again.");
+      setError("An error occurred. Please check your internet connection and try again.");
+    } finally {
+      setLoading(false); // Hide loader after response
     }
   };
 
@@ -58,7 +70,8 @@ const Login = () => {
             className="login-input"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            autoComplete="email" // ✅ Added this
+            autoComplete="email"
+            disabled={loading} // Disable input while loading
           />
           <label>Password</label>
           <input
@@ -67,12 +80,18 @@ const Login = () => {
             className="login-input"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password" // ✅ Added this
+            autoComplete="current-password"
+            disabled={loading} // Disable input while loading
           />
-          <button type="submit" className="login-button">Log In</button>
+          <button type="submit" className="login-button" disabled={loading}>
+            {loading ? "Logging in..." : "Log In"}
+          </button>
         </form>
         <p className="login-footer">
-          Need an account? <Link to="/signup" className="signup-link">Register</Link>
+          Need an account?{" "}
+          <Link to="/signup" className="signup-link">
+            Register
+          </Link>
         </p>
       </div>
     </div>
